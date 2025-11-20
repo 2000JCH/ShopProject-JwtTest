@@ -81,10 +81,12 @@ public class MemberController {
     }
     @GetMapping("/my-page/jwt")
     @ResponseBody
-    String mypageJWT(HttpServletRequest request) {
+    String mypageJWT(Authentication auth) {
 
-        Cookie[] cookies = request.getCookies();
-
+        CustomUser user = (CustomUser) auth.getPrincipal();
+        System.out.println(user);
+        System.out.println(user.displayName);
+        System.out.println(user.getAuthorities());
 
 
         return "";

@@ -8,10 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class JwtFilter extends OncePerRequestFilter {
     @Override
@@ -45,7 +48,17 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 3. 유효하면 Auth 변수에 유저정보 추가해주기
-        var customUser = new CustomUser();
+        // customUser에 권한을 넣으려면 SimpleGrantedAuthority에 담아서 넣어줘야함
+        String[] arr = claim.get("authorities").toString().split(","); //권한을 리스트로 만들기
+        List<SimpleGrantedAuthority> authorities = Arrays.stream(arr).map(a -> new SimpleGrantedAuthority(a)).toList();
+
+        var customUser = new CustomUser(
+                claim.get("username").toString(),
+                "none",
+                authorities
+
+        ); //username, password, authority 필수적으로 넣어야함.
+
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 claim.get("username").toString(), ""    //유저네임, 패스워드은 필수, 여기있는게 auth.getPrincipal()에 추가됨
