@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{ nav.html::navbar }"></div>
+
+    <form action="/search" method="POST">
+        <input name="searchText" style="display: inline">
+        <button>검색</button>
+    </form>
+
+    <div class="card" th:each="i : ${items}">
+        <img th:src="${#strings.isEmpty(i.imageUrl) ? 'https://placehold.co/300' : i.imageUrl}" width="300">
+<!--        <img th:src="${i.imageUrl != null ? i.imageUrl : 'https://placehold.co/300'}" width="300">-->
+
+        <div>
+            <h4 th:text="${i.title}"></h4>
+            <a th:href="@{ '/detail/' + ${i.id} }">자세히 보기</a>
+            <p th:text="${i.price} + '원'"></p>
+            <a th:href="@{'/edit/' + ${i.id}}">✏️</a>
+            <span th:onclick = "fetch('/delete?id=[[${i.id}]]', {method : 'DELETE'})
+                .then(r => r.text())    // 삭제완료 라는 텍스트 이기 때문에 text()
+                .then(() => {
+                    location.reload();  // 새로고침 없이 화면에서 삭제됨
+                })
+            ">🗑️</span>
+        </div>
+    </div>
+
+<!--    <div th:if="${items.totalPages > 1}">-->
+<!--        <ul>-->
+<!--            <li th:each="i : ${#numbers.sequence(1, items.totalPages)}">-->
+<!--                <a th:href="@{'/list/page/' + ${i}}" th:text="${i}"></a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+</body>
+</html>

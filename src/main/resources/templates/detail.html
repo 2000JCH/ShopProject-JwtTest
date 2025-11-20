@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{ nav.html::navbar }"></div>
+
+    <div class="detail">
+        <h4>상세페이지</h4>
+        <img th:src="${data.imageUrl != null ? data.imageUrl : 'https://placehold.co/300'}" width="300">
+        <h4 th:text="${data.title}"></h4>
+        <p th:text="${data.price + '원'}"></p>
+    </div>
+
+    <!--주문하기-->
+    <form action="/order" method="post">
+        <input name="title" th:value="${data.title}">
+        <input name="price" th:value="${data.price}">
+        <input name="count" placeholder="count">
+        <button>주문하기</button>
+    </form>
+
+    <ul>
+        <h4>[ 리뷰 ]</h4>
+        <li th:each="c : ${comments}">
+            <h4 th:text="${c.content}"></h4>
+        </li>
+    </ul>
+
+    <!--리뷰 달기 CommentController-->
+    <form action="/comment" method="POST">
+        <input name="content">
+        <input name="parent" th:value="${data.id}" style="display : none">
+        <button>전송</button>
+    </form>
+</body>
+</html>

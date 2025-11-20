@@ -1,0 +1,17 @@
+<div class="nav" th:fragment="navbar">
+    <a class="logo">SpringMall</a>
+    <a href="/list">List</a>
+    <a href="/write">Write</a>
+
+    <!-- 로그인 안 된 상태 -->
+    <span sec:authorize="!isAuthenticated()">
+        <a href="/register">회원가입</a>
+        <a href="/login">로그인</a>
+    </span>
+
+    <!-- 로그인 상태 -->
+    <span sec:authorize="isAuthenticated()">
+        환영합니다, <span sec:authentication="principal.username"></span>님!
+        <a href="/logout">로그아웃</a>
+    </span>
+</div>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>로그인 페이지</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{ nav.html::navbar }"></div>
+
+<h4>로그인하세요</h4>
+
+<div th:if="${param.error}">
+    <h4>아이디나 비번 틀림</h4>
+</div>
+
+<form action="/login" method="post">    <!--Controller에서 post로 받는게 따로 없음. 폼으로 로그인 하겠다.-->
+    <input name ="username">    <!--type이 없으면 디폴트로 type="text"-->
+    <input name ="password" type="password">
+    <button type = "submit">전송</button> <!--type를 password로 하면 입력할때 ●●● 이렇게 가려준다-->
+</form>
+
+<h4>JWT 로그인</h4>
+<form>
+    <input name ="username" id="username">
+    <input name ="password" type="password" id="password">
+</form>
+<button onclick="loginJWT()">전송</button>
+<script>
+    function loginJWT(){
+        fetch('/login/jwt', {
+            method : 'POST',
+            headers : {'Content-Type': 'application/json'},
+            body : JSON.stringify({ // 객체를 JSON 문자열로 변환
+                username : document.querySelector('#username').value,
+                password : document.querySelector('#password').value
+            })
+        }).then(r => r.text()).then((r)=>{ console.log(r) })
+    }
+</script>
+
+<button onclick="getMyPage()">JWT 마이페이지 주세요</button>
+<script>
+    function getMyPage(){
+        fetch('/my-page/jwt')
+            .then((r)=> r.text())
+            .then(()=> { console.log(r) })
+    }
+</script>
+
+
+</body>
+</html>
