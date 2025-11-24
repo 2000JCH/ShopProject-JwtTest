@@ -38,7 +38,27 @@
                 username : document.querySelector('#username').value,
                 password : document.querySelector('#password').value
             })
-        }).then(r => r.text()).then((r)=>{ console.log(r) })
+        })
+            .then(r => {
+                if(r.status === 200) return r.text();
+                else throw new Error('로그인 실패');
+            })
+            .then(jwt => {
+                console.log("JWT:", jwt);
+                if(jwt) {
+                    // 로그인 성공 시 /list 페이지로 이동
+                    window.location.href = "/list";
+                } else {
+                    alert("로그인 실패: JWT가 없습니다.");
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                alert("로그인 실패");
+                // 실패 시 login.html 내에 에러 메시지를 표시하려면
+                // 예를 들어 <div id="error-msg">를 만들어서 여기에 메시지 넣기
+                document.getElementById("error-msg").innerText = "아이디나 비밀번호가 틀렸습니다.";
+            });
     }
 </script>
 
@@ -50,7 +70,6 @@
             .then(()=> { console.log(r) })
     }
 </script>
-
 
 </body>
 </html>
