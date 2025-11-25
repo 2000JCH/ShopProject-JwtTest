@@ -53,12 +53,16 @@ public class JwtFilter extends OncePerRequestFilter {
         String[] arr = claim.get("authorities").toString().split(","); //권한을 리스트로 만들기
         List<SimpleGrantedAuthority> authorities = Arrays.stream(arr).map(a -> new SimpleGrantedAuthority(a)).toList();
 
-        CustomUser customUser = new CustomUser(
+        CustomUser customUser = new CustomUser( //CustomUser 클래스를 참조 -> username, password, authorities만 참조
                 claim.get("username").toString(),
                 "none",
                 authorities
-
         ); //username, password, authority 필수적으로 넣어야함.
+        //jwt 토큰을 만들때 displayName, id값을 포함하게 함,
+        // 주문하기 기능을 위해 id값도 참조하게 해야함
+        customUser.displayName = claim.get("displayName").toString();
+        customUser.id = ((Number) claim.get("id")).longValue();
+
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 customUser,

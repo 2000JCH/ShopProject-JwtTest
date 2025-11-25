@@ -21,11 +21,15 @@ public class SalesController {
 
     @PostMapping("/order")
     String postOrder(@RequestParam String title, @RequestParam Integer price, @RequestParam Integer count, Authentication auth) {
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
         Sales sales = new Sales();
         sales.setItemName(title);
         sales.setPrice(price);
         sales.setCount(count);
-        CustomUser user = (CustomUser) auth.getPrincipal();
+        CustomUser user = (CustomUser) auth.getPrincipal(); //어떤 유저가 만들었는지 확인하기 위해
         Member member = new Member();
         member.setId(user.id);
         sales.setMember(member);
