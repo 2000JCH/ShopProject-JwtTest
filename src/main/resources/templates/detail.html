@@ -20,6 +20,7 @@
 
     <!--주문하기-->
     <form action="/order" method="post">
+        <input type="hidden" name="id" th:value="${data.id}">
         <input name="title" th:value="${data.title}">
         <input name="price" th:value="${data.price}">
         <input name="count" placeholder="count">

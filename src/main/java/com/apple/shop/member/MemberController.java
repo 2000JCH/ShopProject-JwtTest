@@ -76,7 +76,7 @@ public class MemberController {
 
             //쿠키에 저장해주세요~
             Cookie cookie = new Cookie("jwt", jwt);
-            cookie.setMaxAge(10); //JWT 유효기간이랑 비슷하게 또는 길게 하면 됨
+            cookie.setMaxAge(300); //JWT 유효기간이랑 비슷하게 또는 길게 하면 됨 / 5분
             cookie.setHttpOnly(true);   // 해킹범이 쿠키를 자바스크립트로 조작하기 어려워짐
             cookie.setPath("/");    //쿠키가 전송될 URL
             response.addCookie(cookie);

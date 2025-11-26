@@ -1,5 +1,7 @@
 package com.apple.shop.sales;
 
+import com.apple.shop.item.Item;
+import com.apple.shop.item.ItemRepository;
 import com.apple.shop.member.CustomUser;
 import com.apple.shop.member.Member;
 import com.apple.shop.member.MemberRepository;
@@ -18,24 +20,17 @@ import java.util.Optional;
 public class SalesController {
     private final SalesRepository salesRepository;
     private final MemberRepository memberRepository;
+    private final ItemRepository itemRepository;
+    private final SalesService salesService;
 
     @PostMapping("/order")
-    String postOrder(@RequestParam String title, @RequestParam Integer price, @RequestParam Integer count, Authentication auth) {
-        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
-            return "redirect:/login";
-        }
+    String postOrder(@RequestParam String title,
+                     @RequestParam Integer price,
+                     @RequestParam Integer count,
+                     @RequestParam Long id,
+                     Authentication auth) {
 
-        Sales sales = new Sales();
-        sales.setItemName(title);
-        sales.setPrice(price);
-        sales.setCount(count);
-        CustomUser user = (CustomUser) auth.getPrincipal(); //어떤 유저가 만들었는지 확인하기 위해
-        Member member = new Member();
-        member.setId(user.id);
-        sales.setMember(member);
-        salesRepository.save(sales);
-
-        return "list";
+        return salesService.addSales(title, price, count, id, auth);
     }
 
     @GetMapping("/order/all")
@@ -43,9 +38,8 @@ public class SalesController {
 //        List<Sales> result = salesRepository.customFindAll();
 //        System.out.println(result);
 
-        Optional<Member> result = memberRepository.findById(1L);
+        Optional<Member> result = memberRepository.findById(8L);
         System.out.println(result.get().getSales());
-
 
         return "list.html";
     }

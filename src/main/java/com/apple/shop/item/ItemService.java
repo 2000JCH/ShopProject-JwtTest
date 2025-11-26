@@ -17,8 +17,8 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public void saveItem(String title, Integer price, String imageUrl,  Authentication auth) {
-        if (!auth.isAuthenticated()){
+    public void saveItem(String title, Integer price, String imageUrl, Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()){
             throw new RuntimeException("로그인이 필요합니다.");
         }
 
@@ -31,6 +31,7 @@ public class ItemService {
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
+        item.setStockCount(10);
         item.setImageUrl(imageUrl);
         itemRepository.save(item);
     }

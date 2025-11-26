@@ -63,7 +63,6 @@ public class JwtFilter extends OncePerRequestFilter {
         customUser.displayName = claim.get("displayName").toString();
         customUser.id = ((Number) claim.get("id")).longValue();
 
-
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 customUser,
                 null,

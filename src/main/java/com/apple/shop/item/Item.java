@@ -17,5 +17,6 @@ public class Item {
 
     private String title;
     private Integer price;
+    private Integer stockCount;
     private String imageUrl;
 }
